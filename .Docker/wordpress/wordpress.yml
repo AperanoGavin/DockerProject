@@ -1,0 +1,40 @@
+version: "2.1"
+# Creates WordPress container and links to db container via user-defined network mysql-net
+# Video at https://www.youtube.com/watch?v=NdwB5TPXCnQ explains the file
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress
+    hostname: wordpress
+    restart: always
+    # Connect to the database container's network
+    networks:
+      - mysql-net
+    ports:
+      # Exposes an external port 8082 to an internal container port 82
+      - 8082:82
+    environment:
+      # This variable points this container to the container called db for database
+      WORDPRESS_DB_HOST: db
+      # Root user so we don't have to add a new user for each service to database
+      # (but you can name one with own password, just don't forget to create user in database before running the container)
+      WORDPRESS_DB_USER: root
+      # Database user's password (if not root user, then set for user)
+      WORDPRESS_DB_PASSWORD: dbrootpassword
+      # Just make sure you create an empty database in MariaDB with this name first before spinning up this stack
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      # Sets a persistent volume called wordpress which maps inside the container as /var/www/html
+      - wordpress:/var/www/html
+ 
+volumes:
+  # Create volume called wordpress for persistent storage
+  wordpress:
+    # Specify name so it does not append stack name and become wordpress_wordpress
+    name: wordpress
+networks:
+  mysql-net:
+    # Joins existing network of this name (it was created by db container)
+    external: true
+    # Specify name so that it does not append stack name
+    name: mysql-net
