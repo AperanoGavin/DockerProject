@@ -8,7 +8,7 @@ services:
     command: --api.insecure=true --providers.docker
     ports:
       # The HTTP port
-      - "80:80"
+      - "81:81"
       # The Web UI (enabled by --api.insecure=true)
       - "8080:8080"
     volumes:
