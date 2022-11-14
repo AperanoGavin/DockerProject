@@ -47,7 +47,6 @@ services:
             -  ./:/var/www
             - ./config/nginx/:/etc/nginx/conf.d/
     depends_on:
-        - mysql
     
 
 
