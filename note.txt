@@ -16,3 +16,6 @@ build a netword for use mysql between all containers
 //connect to mysql 
 
 #4#docker run -it --network todo-app nicolaka/netshoot
+
+#5#
+docker compose logs -f
