@@ -6,23 +6,23 @@ services:
 
   web1:
     build: 
-          context: .
+          context: ./.Docker/php/Dockerfile
           dockerfile: Dockerfile
     image: website_php1
     container_name : app
     restart : unless-stopped
     volumes :
-            -  ./:/var/www
+            -  ./.Docker/php/website_php1:/var/www
 
   web2:
      build: 
-          context: .
+          context: ./.Docker/php/Dockerfile
           dockerfile: Dockerfile
   image: website_php2
   container_name : app
   restart : unless-stopped
   volumes :
-            -  ./:/var/www          
+           -  ./.Docker/php/website_php2:/var/www          
 
   nginx:
     build:
