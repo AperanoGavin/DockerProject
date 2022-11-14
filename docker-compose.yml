@@ -13,6 +13,11 @@ services:
     restart : unless-stopped
     volumes :
             -  ./.Docker/php/website_php1:/var/www
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: todos        
 
   web2:
      build: 
@@ -23,6 +28,11 @@ services:
   restart : unless-stopped
   volumes :
            -  ./.Docker/php/website_php2:/var/www          
+  environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: todos
 
   nginx:
     build:
