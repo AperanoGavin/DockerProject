@@ -1,7 +1,9 @@
 version: "3.7"
 
+
 services:
-  appNode:
+
+  app:
     image: node:12-alpine
     command: sh -c "yarn install && yarn run dev"
     ports:
