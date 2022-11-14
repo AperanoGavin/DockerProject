@@ -1,1 +1,18 @@
 #####note rigth there
+build a netword for use mysql between all containers
+#1#docker network create mysql  // docker network create todo-app
+#2#docker network list
+#3#docker run -d --name  mysql  --network mysql -e MYSQL_ROOT_PASSWORD="gavin"  mysql
+
+#2# docker run -d \
+     --network todo-app --network-alias mysql \
+     -v todo-mysql-data:/var/lib/mysql \
+     -e MYSQL_ROOT_PASSWORD=secret \
+     -e MYSQL_DATABASE=todos \
+     mysql:8
+
+#3# docker exec -it 85010df14b334a1b8252a4e74ca68580fb107bf69f4fc5c7ff336666d5404848  mysql -u root -p
+
+//connect to mysql 
+
+#4#docker run -it --network todo-app nicolaka/netshoot
