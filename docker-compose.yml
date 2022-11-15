@@ -1,62 +1,69 @@
-version: "3.7"
+version: '3.7'
 
 
 services:
 
-
-  web1:
-    build: 
-          context: ./.Docker/php/Dockerfile
+    web1:
+        build: 
+          context: ./.Docker/php
           dockerfile: Dockerfile
-    image: website_php1
-    container_name : app
-    restart : unless-stopped
-    volumes :
-            -  ./.Docker/php/website_php1:/var/www
-    environment:
-      MYSQL_HOST: mysql
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_DB: todos        
+        image: website_php1
+        container_name : web1
+        restart : unless-stopped
+        volumes :
+          -  ./.Docker/php/website_php1:/var/www
+        environment:
+          MYSQL_HOST: mysql
+          MYSQL_USER: root
+          MYSQL_PASSWORD: secret
+          MYSQL_DB: todos        
 
-  web2:
-     build: 
-          context: ./.Docker/php/Dockerfile
-          dockerfile: Dockerfile
-  image: website_php2
-  container_name : app
-  restart : unless-stopped
-  volumes :
-           -  ./.Docker/php/website_php2:/var/www          
-  environment:
-      MYSQL_HOST: mysql
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_DB: todos
+    web2:
+      build: 
+        context: ./.Docker/php
+        dockerfile: Dockerfile
+      image: website_php2
+      container_name : web2
+      restart : unless-stopped
+      volumes :
+        -  ./.Docker/php/website_php2:/var/www          
+      environment:
+        MYSQL_HOST: mysql
+        MYSQL_USER: root
+        MYSQL_PASSWORD: secret
+        MYSQL_DB: todos
 
-  nginx:
-    build:
-      context: ./nginx/dockerfile
-      dockerfile: dockerfile
-    image: nginx
-    container_name : nginx_1
-    restart : unless-stopped
-    ports :
-            - 80:80
-    volumes :
-            -  ./:/var/www
-            - ./config/nginx/:/etc/nginx/conf.d/
-    depends_on:
+    nginx:
+      build:
+        context: ./.Docker/nginx
+        dockerfile: dockerfile
+      image: nginx
+      container_name : nginx_1
+      restart : unless-stopped
+      ports :
+        - 8282:80
+      volumes :
+        - ./.Docker/nginx/nginx.conf:/etc/nginx/conf.d/core.conf
+        - ./.Docker/nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf
+        - ./.Docker/php/website_php1/website_php1.conf:/var/www/html
+        - ./.Docker/php/website_php2/website_php2.conf:/var/www/html
+
+      depends_on:
+        - web1
+        - web2  
+
+      links:
+      - web1
+      - web2  
+      - mysql
     
-
-
-  mysql:
-    image: mysql:8
-    volumes:
-      - todo-mysql-data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: todos
+    mysql:
+      image: mysql:8
+      volumes:
+        - todo-mysql-data:/var/lib/mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: secret
+        MYSQL_DATABASE: todos
 
 volumes:
-  todo-mysql-data:
+  todo-mysql-data: 
